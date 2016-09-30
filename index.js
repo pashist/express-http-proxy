@@ -78,7 +78,10 @@ module.exports = function proxy(host, options) {
         asBuffer(bodyContent, options) :
         asBufferOrString(bodyContent);
 
-      reqOpt.headers['content-length'] = getContentLength(bodyContent);
+      var contentLength = getContentLength(bodyContent);
+      if (req.headers['content-length'] || contentLength) {
+        reqOpt.headers['Content-Length'] = contentLength;
+      }
 
       if (bodyEncoding(options)) {
         reqOpt.headers[ 'Accept-Encoding' ] = bodyEncoding(options);
