@@ -156,6 +156,9 @@ module.exports = function proxy(host, options) {
 
       realRequest.on('error', function(err) {
         if (err.code === 'ECONNRESET') {
+          if (typeof options.timeoutCallback === 'function') {
+            options.timeoutCallback(err, req)
+          }
           res.setHeader('X-Timout-Reason',
             'express-http-proxy timed out your request after ' +
             options.timeout + 'ms.');
